@@ -1,0 +1,31 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+
+data = {
+    'Income': [15, 16, 16, 15, 88, 89, 90, 91, 85, 86, 87, 25, 24, 25, 26],
+    'Spending': [39, 36, 37, 38, 75, 76, 77, 78, 72, 73, 74, 45, 47, 44, 46]
+}
+
+df = pd.DataFrame(data)
+
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(df)
+
+dbscan = DBSCAN(eps=0.8, min_samples=2)
+labels = dbscan.fit_predict(X_scaled)
+
+
+df['Cluster'] = labels
+
+
+plt.figure(figsize=(8, 5))
+plt.scatter(df['Income'], df['Spending'], c=labels, cmap='plasma', s=100)
+plt.title("DBSCAN Clustering on Customer Data")
+plt.xlabel("Income")
+plt.ylabel("Spending Score")
+plt.grid(True)
+plt.show()
